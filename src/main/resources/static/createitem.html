@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html>
+
+    <head>
+        <meta charset="utf-8">
+        <!-- <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <title></title>
+        <meta name="viewport" content="width=device-width, initial-scale=1"> -->
+        <link href="static/assets/global/plugins/bootstrap/css/bootstrap.min.css" rel="stylesheet" type="text/css"/>
+        <link href="static/assets/global/css/components.css" rel="stylesheet" type="text/css"/>
+        <link href="static/assets/admin/pages/css/login.css" rel="stylesheet" type="text/css"/>
+        <script src="static/assets/global/plugins/jquery-1.11.0.min.js" type="text/javascript"></script>
+    </head>
+
+<body class="login">
+	<div class="content">
+		<h3 class="form-title">创建商品</h3>
+		<div class="form-group">
+			<label class="control-label">商品名</label>
+			<div>
+				<input class="form-control" type="text" name="title" id="title">
+			</div>
+		</div>
+		<div class="form-group">
+			<label class="control-label">商品价格</label>
+			<div>
+				<input class="form-control" type="text" name="price" id="price">
+			</div>
+		</div>
+		<div class="form-group">
+			<label class="control-label">商品库存</label>
+			<div>
+				<input class="form-control" type="text" name="stock" id="stock">
+			</div>
+		</div>
+		<div class="form-group">
+			<label class="control-label">商品描述</label>
+			<div>
+				<input class="form-control" type="text" name="description" id="description">
+			</div>
+		</div>
+		<div class="form-group">
+			<label class="control-label">商品图片</label>
+			<div>
+				<input class="form-control" type="text" name="imgUrl" id="imgUrl">
+			</div>
+		</div>
+		<div class="form-actions">
+			<button class="btn blue" id="create" type="submit">
+				提交创建
+			</button>
+		</div>
+	</div>
+</body>
+
+<script>
+	$(document).ready(function() {
+		$("#create").on("click", function() {
+			var title = $("#title").val();
+			var price = $("#price").val();
+			var stock = $("#stock").val();
+			var description = $("#description").val();
+			var imgUrl = $("#imgUrl").val();
+			if (title == null || title == "") {
+				alert("商品名不能为空");
+				return false;
+			}
+			if (price == null || price == "") {
+				alert("商品价格不能为空");
+				return false;
+			}
+			if (stock == null || stock == "") {
+				alert("商品库存不能为空");
+				return false;
+			}
+			if (description == null || description == "") {
+				alert("商品描述不能为空");
+				return false;
+			}
+			if (imgUrl == null || imgUrl == "") {
+				alert("商品图片不能为空");
+				return false;
+			}
+			$.ajax({
+				type: "POST",
+				contentType: "application/x-www-form-urlencoded",
+				url: "http://localhost:8080/item/create",
+				data: {
+					"title": title,
+					"price": price,
+					"stock": stock,
+					"description": description,
+					"imgUrl": imgUrl
+				},
+				xhrFields:{
+					withCredentials:true
+				},
+				success: function(data) {
+					if (data.status == "success") {
+						alert("创建成功");
+					} else {
+						alert("创建失败，原因为" + data.data.errMsg);
+					}
+				},
+				error: function(data) {
+					alert("创建失败，原因为" + data.responseText);
+				}
+			});
+			return false;
+		});
+	});
+</script>
+
+</html>
