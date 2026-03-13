@@ -7,18 +7,16 @@ import com.miaoshaproject.error.EmBusinessError;
 import com.miaoshaproject.response.CommonReturnType;
 import com.miaoshaproject.service.UserService;
 import com.miaoshaproject.service.model.UserModel;
-import org.apache.tomcat.util.security.MD5Encoder;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
-import sun.awt.EmbeddedFrame;
-import sun.misc.BASE64Encoder;
 
 import javax.servlet.http.HttpServletRequest;
 import java.io.UnsupportedEncodingException;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
+import java.util.Base64;
 import java.util.Random;
 
 @RestController
@@ -49,7 +47,6 @@ public class UserController extends BaseController {
         UserModel userModel =userService.validateLogin(telphong,this.enCodeByMD5(password));
 
         //将登陆凭证加入到用户登陆成功的session中
-        UserVo userVo = convertFromMode(userModel);
         this.httpServletRequest.getSession().setAttribute("IS_LOGIN",true);
         this.httpServletRequest.getSession().setAttribute("LOGIN_USER",userModel);
 
@@ -92,9 +89,8 @@ public class UserController extends BaseController {
     public String enCodeByMD5(String str) throws NoSuchAlgorithmException, UnsupportedEncodingException {
         // 确定计算方法
         MessageDigest md5 = MessageDigest.getInstance("MD5");
-        BASE64Encoder base64Encoder = new BASE64Encoder();
         // 加密字符串
-        String newStr = base64Encoder.encode(md5.digest(str.getBytes("utf-8")));
+        String newStr = Base64.getEncoder().encodeToString(md5.digest(str.getBytes("utf-8")));
         return newStr;
     }
 

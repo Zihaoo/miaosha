@@ -64,6 +64,14 @@ public class ItemController extends BaseController {
         return CommonReturnType.create(itemVo);
     }
 
+    @RequestMapping(value = "/inspect", method = {RequestMethod.GET})
+    @ResponseBody
+    public CommonReturnType inspectItem(@RequestParam(name = "id") Integer id) {
+        ItemModel itemModel = itemService.getItemById(id);
+        ItemVo itemVo = this.convertVOFromModel(itemModel);
+        return CommonReturnType.create(itemVo);
+    }
+
     //商品列表页浏览
     @RequestMapping(value = "/list", method = {RequestMethod.GET})
     @ResponseBody
@@ -94,6 +102,7 @@ public class ItemController extends BaseController {
         } else {
             itemVo.setPromoStatus(0);
         }
+        itemVo.setHasActivePromo(itemVo.getPromoStatus() != null && itemVo.getPromoStatus() == 2);
         return itemVo;
     }
 

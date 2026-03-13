@@ -47,7 +47,7 @@ public class OrderServiceImpl implements OrderService {
             throw new BussinessException((EmBusinessError.PARAMETER_VALIDATION_ERROR),"商品不存在");
         }
         UserModel userModel = userService.getUserById(userId);
-        if(userId == null) {
+        if(userModel == null) {
             throw new BussinessException(EmBusinessError.PARAMETER_VALIDATION_ERROR,"用户不存在");
         }
         if(amount <= 0 || amount > 99){
